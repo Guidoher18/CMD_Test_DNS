@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace TestDNS
 {
@@ -11,13 +12,39 @@ namespace TestDNS
     {
         static void Main()
         {
+            Ping("200.51.211.7", "Telefónica DNS1");
+            Ping("200.51.212.7", "Telefónica DNS2");
+            Ping("208.67.222.222", "Open DNS1");
+            Ping("208.67.220.220", "Open DNS2");
+            Ping("8.8.8.8", "Google DNS1");
+            Ping("8.8.4.4", "Google DNS2");
+            Console.ReadKey();
+        }
+        static void Ping(string Dns, string Nombre)
+        {
+            // Abro una nueva instancia de Process para comenzar un proceso
+            Process consola = new Process();
+            // Establesco que aplicación voy a abrir y con qué argumentos. También establezco que la ventana este oculta
+            consola.StartInfo.FileName = "cmd.exe";
+            consola.StartInfo.Arguments = "/C ping " + Dns;
+            //consola.WindowStyle = ProcessWindowStyle.Hidden;
+            consola.StartInfo.UseShellExecute = false;
+            consola.StartInfo.ErrorDialog = false;
+            consola.StartInfo.CreateNoWindow = true;
+            consola.StartInfo.RedirectStandardOutput = true;
+            consola.StartInfo.RedirectStandardError = true;
+            // Comienzo el Proceso
+            consola.Start();
 
-            ProcessStartInfo consola = new ProcessStartInfo();
-            consola.FileName = "cmd.exe";
-            consola.Arguments = "/C ping 200.51.211.7";
-            consola.WindowStyle = ProcessWindowStyle.Maximized;
-            Process.Start(consola);
-          
+            string salida = consola.StandardOutput.ReadToEnd();
+            Console.WriteLine(Nombre);
+            Console.WriteLine(salida);
+            //Console.ReadKey();
+            consola.Close();
+
+
+
+
             /*Process.Start("cmd.exe", );
             Console.WriteLine("Ahora Vamos a Testear la velocidad de conexion con los DNS");
             Console.WriteLine("TELEFÓNICA DNS----------------------");
@@ -57,25 +84,9 @@ namespace TestDNS
              Console.WriteLine(result);
              Console.ReadKey();
          }
-
-
-         static void Main(string[] args)
-         {
-             /*Console.WriteLine("Ahora Vamos a Testear la velocidad de conexion con los DNS");
-             Console.WriteLine("TELEFÓNICA DNS----------------------");
-             Console.WriteLine("ping 200.51.211.7");
-             Console.WriteLine("ping 200.51.212.7");
-
-             Console.WriteLine("OPEN DNS ----------------------");
-             Console.WriteLine("ping 208.67.222.222");
-             Console.WriteLine("ping 208.67.220.220");
-
-             Console.WriteLine("GOOGLE DNS ----------------------");
-             Console.WriteLine("ping 8.8.8.8");
-             Console.WriteLine("ping 4.4.4.4");
-             Console.WriteLine("Presione una Tecla para Salir");
-
-             Console.ReadKey();*/
+         */
         }
+
+        
     }
 }
