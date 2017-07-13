@@ -92,8 +92,6 @@ namespace TestDNS
             consola.Close();
 
         }
-
-
-
+        
     }
 }
